@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🦍 ゴリリンガル (Gorilingual)</title>
+  <title>🦍 ゴリリンガル</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -104,8 +104,8 @@
 
     textarea {
       width: 100%;
-      border: none;
-      background: #0f1d3a;
+      border: 1.5px solid #3a5a90;
+      background: #162645;
       color: #fff;
       border-radius: 8px;
       padding: 12px;
@@ -114,6 +114,10 @@
       min-height: 80px;
       outline: none;
       font-family: inherit;
+    }
+
+    textarea:focus {
+      border-color: #5a8fd0;
     }
 
     textarea::placeholder { color: #4a6080; }
@@ -146,6 +150,7 @@
 
     .output-box {
       background: #0f1d3a;
+      border: 1.5px solid #3a5a90;
       border-radius: 8px;
       padding: 14px;
       margin-top: 14px;
@@ -159,93 +164,11 @@
     .output-box.decode-out { color: #7ed4f0; }
     .output-box.empty { color: #4a6080; font-style: italic; }
 
-    .steps-section {
-      max-width: 700px;
-      margin: 0 auto 20px;
-    }
-
-    .steps-toggle {
-      background: none;
-      border: 1px solid #2a5090;
-      color: #7aaff0;
-      font-size: 0.9rem;
-      padding: 8px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-bottom: 10px;
-      display: block;
-      width: 100%;
-    }
-
-    .steps-toggle:hover { background: #162040; }
-
-    .steps-box {
-      background: #162040;
-      border-radius: 12px;
-      border: 1px solid #2a3f70;
-      padding: 16px 20px;
-      display: none;
-    }
-
-    .steps-box.visible { display: block; }
-
-    .step {
-      margin-bottom: 14px;
-    }
-
-    .step-label {
-      font-size: 0.78rem;
-      color: #7aaff0;
-      margin-bottom: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .step-value {
-      background: #0f1d3a;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 0.92rem;
-      word-break: break-all;
-      line-height: 1.7;
-      color: #e0e8ff;
-      min-height: 36px;
-    }
-
-    .info-row {
-      display: flex;
-      gap: 14px;
-      max-width: 700px;
-      margin: 0 auto 20px;
-      flex-wrap: wrap;
-    }
-
-    .info-box {
-      flex: 1;
-      background: #162040;
-      border-radius: 10px;
-      border: 1px solid #2a3f70;
-      padding: 14px;
-      min-width: 200px;
-    }
-
-    .info-box h3 {
-      font-size: 0.8rem;
-      color: #a0b4d6;
-      margin-bottom: 8px;
-    }
-
-    .info-box p {
-      font-size: 0.88rem;
-      color: #cde;
-      line-height: 1.6;
-    }
-
     .toast {
       position: fixed;
       bottom: 24px;
       left: 50%;
-      transform: translateX(-50%) translateY(60px);
+      transform: translateX(-50%) translateY(120px);
       background: #43a047;
       color: #fff;
       padding: 10px 24px;
@@ -266,8 +189,8 @@
 </head>
 <body>
 
-<h1>🦍 ゴリリンガル（Gorilingual）</h1>
-<p class="subtitle">日本語テキストを5種の文字だけで表現する ウホッ！？ エンコーダ/デコーダ</p>
+<h1>🦍 ゴリリンガル</h1>
+<p class="subtitle">日本語テキストをウホッ！？の5文字だけで伝達する</p>
 
 <!-- 文字マップ -->
 <div class="char-map">
@@ -283,73 +206,33 @@
 
 <!-- エンコード -->
 <div class="panel">
-  <div class="panel-header">▼ エンコード：日本語 → ウホッ！？</div>
+  <div class="panel-header">📝 エンコード：日本語 → ウホッ！？</div>
   <div class="panel-body">
-    <textarea id="encode-input" placeholder="ここに日本語を入力…" rows="3"></textarea>
+    <textarea id="encode-input" placeholder="ここに日本語テキストを入力…" rows="3"></textarea>
     <div class="btn-row">
       <button class="btn-encode" onclick="doEncode()">エンコード</button>
       <button class="btn-copy"  onclick="copyResult('encode-output')">コピー</button>
       <button class="btn-clear" onclick="clearEncode()">クリア</button>
     </div>
-    <div id="encode-output" class="output-box empty">（エンコード結果がここに表示されます）</div>
-  </div>
-</div>
-
-<!-- エンコード処理ステップ -->
-<div class="steps-section">
-  <button class="steps-toggle" onclick="toggleSteps('encode-steps')">▶ エンコード処理ステップを表示</button>
-  <div class="steps-box" id="encode-steps">
-    <div class="step">
-      <div class="step-label">STEP 1: 入力テキスト</div>
-      <div class="step-value" id="step1">—</div>
-    </div>
-    <div class="step">
-      <div class="step-label">STEP 2: UTF-8 バイト列</div>
-      <div class="step-value" id="step2">—</div>
-    </div>
-    <div class="step">
-      <div class="step-label">STEP 3: 各バイトを5進数4桁（リトルエンディアン）</div>
-      <div class="step-value" id="step3">—</div>
-    </div>
-    <div class="step">
-      <div class="step-label">STEP 4: 5進数の桁を文字にマッピング</div>
-      <div class="step-value" id="step4">—</div>
-    </div>
+    <div id="encode-output" class="output-box empty"></div>
   </div>
 </div>
 
 <!-- デコード -->
 <div class="panel">
-  <div class="panel-header decode">▲ デコード：ウホッ！？ → 日本語</div>
+  <div class="panel-header decode">🔍 デコード：ウホッ！？ → 日本語</div>
   <div class="panel-body">
-    <textarea id="decode-input" placeholder="ウホッ！？でエンコードされたテキストを入力…" rows="3"></textarea>
+    <textarea id="decode-input" placeholder="ここにウホッ！？文字列を入力…" rows="3"></textarea>
     <div class="btn-row">
       <button class="btn-decode" onclick="doDecode()">デコード</button>
       <button class="btn-copy"  onclick="copyResult('decode-output')">コピー</button>
       <button class="btn-clear" onclick="clearDecode()">クリア</button>
     </div>
-    <div id="decode-output" class="output-box decode-out empty">（デコード結果がここに表示されます）</div>
+    <div id="decode-output" class="output-box decode-out empty"></div>
   </div>
 </div>
 
 <!-- 情報 -->
-<div class="info-row">
-  <div class="info-box">
-    <h3>効率</h3>
-    <p>
-      日本語1文字 → UTF-8で3バイト → <strong>12ウホ文字</strong><br>
-      数字/ASCII → UTF-8で1バイト → <strong>4ウホ文字</strong>
-    </p>
-  </div>
-  <div class="info-box">
-    <h3>アルゴリズム</h3>
-    <p>
-      各バイト値を5進数4桁（リトルエンディアン）に変換し、
-      0→ウ、1→ホ、2→ッ、3→！、4→？ にマッピング。
-    </p>
-  </div>
-</div>
-
 <div class="toast" id="toast">コピーしました！</div>
 
 <script>
@@ -411,23 +294,11 @@
     if (!input.trim()) return;
 
     const utf8 = new TextEncoder().encode(input);
-    const bytesHex = [...utf8].map(b => b.toString(16).toUpperCase().padStart(2, '0'));
-    const digits = [...utf8].map(b => byteTo5Base(b));
-    const chars = [...utf8].map(b => byteTo5Base(b).map(d => CHARS[d]).join(''));
-    const encoded = chars.join('');
+    const encoded = [...utf8].map(b => byteTo5Base(b).map(d => CHARS[d]).join('')).join('');
 
-    // 出力
     const outEl = document.getElementById('encode-output');
     outEl.textContent = encoded;
     outEl.classList.remove('empty');
-
-    // ステップ表示
-    document.getElementById('step1').textContent = input;
-    document.getElementById('step2').textContent = bytesHex.join(' | ');
-    document.getElementById('step3').textContent =
-      [...utf8].map((b, i) => `${b}→[${digits[i].join(',')}]`).join('  ');
-    document.getElementById('step4').textContent =
-      [...utf8].map((b, i) => `[${digits[i].join(',')}]→${chars[i]}`).join('  ');
   }
 
   function doDecode() {
@@ -451,7 +322,6 @@
     const out = document.getElementById('encode-output');
     out.textContent = '（エンコード結果がここに表示されます）';
     out.classList.add('empty');
-    ['step1','step2','step3','step4'].forEach(id => document.getElementById(id).textContent = '—');
   }
 
   function clearDecode() {
@@ -472,13 +342,6 @@
     const t = document.getElementById('toast');
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 1800);
-  }
-
-  function toggleSteps(id) {
-    const box = document.getElementById(id);
-    const btn = box.previousElementSibling;
-    const visible = box.classList.toggle('visible');
-    btn.textContent = (visible ? '▼' : '▶') + ' エンコード処理ステップを表示';
   }
 
   // Enter キーでエンコード（Shift+Enter で改行）
