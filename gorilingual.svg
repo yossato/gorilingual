@@ -1,0 +1,88 @@
+<svg width="100%" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif">
+
+  <!-- 背景 -->
+  <rect width="800" height="500" fill="#0d1b3e"/>
+  <!-- ヘッダー帯 -->
+  <rect width="800" height="86" fill="#0f2050"/>
+
+  <!-- タイトル -->
+  <text x="400" y="40" text-anchor="middle" font-size="24" font-weight="bold" fill="white">🦍 ゴリリンガル（Gorilingual）</text>
+  <text x="400" y="64" text-anchor="middle" font-size="12" fill="#a0b4d6">日本語テキストを5種の文字だけで表現する  ウホッ！？  エンコーダ / デコーダ</text>
+
+  <!-- 文字マッピング枠 -->
+  <rect x="40" y="92" width="720" height="76" rx="12" fill="#162040" stroke="#2a3f70" stroke-width="1"/>
+  <text x="400" y="110" text-anchor="middle" font-size="11" fill="#a0b4d6">文字マッピング（5進数の各桁）</text>
+
+  <!-- バッジ ウ (0) -->
+  <rect x="218" y="116" width="62" height="42" rx="9" fill="#e53935"/>
+  <text x="224" y="127" font-size="9" fill="rgba(255,255,255,0.8)">0</text>
+  <text x="249" y="148" text-anchor="middle" font-size="20" font-weight="bold" fill="white">ウ</text>
+
+  <!-- バッジ ホ (1) -->
+  <rect x="296" y="116" width="62" height="42" rx="9" fill="#fb8c00"/>
+  <text x="302" y="127" font-size="9" fill="rgba(255,255,255,0.8)">1</text>
+  <text x="327" y="148" text-anchor="middle" font-size="20" font-weight="bold" fill="white">ホ</text>
+
+  <!-- バッジ ッ (2) -->
+  <rect x="374" y="116" width="62" height="42" rx="9" fill="#43a047"/>
+  <text x="380" y="127" font-size="9" fill="rgba(255,255,255,0.8)">2</text>
+  <text x="405" y="148" text-anchor="middle" font-size="20" font-weight="bold" fill="white">ッ</text>
+
+  <!-- バッジ ！ (3) -->
+  <rect x="452" y="116" width="62" height="42" rx="9" fill="#039be5"/>
+  <text x="458" y="127" font-size="9" fill="rgba(255,255,255,0.8)">3</text>
+  <text x="483" y="148" text-anchor="middle" font-size="20" font-weight="bold" fill="white">！</text>
+
+  <!-- バッジ ？ (4) -->
+  <rect x="530" y="116" width="62" height="42" rx="9" fill="#8e24aa"/>
+  <text x="536" y="127" font-size="9" fill="rgba(255,255,255,0.8)">4</text>
+  <text x="561" y="148" text-anchor="middle" font-size="20" font-weight="bold" fill="white">？</text>
+
+  <!-- フローラベル -->
+  <text x="400" y="188" text-anchor="middle" font-size="12" font-weight="bold" fill="#7aaff0">▼ エンコード処理フロー（例：「こんにちは」→ 各文字がUTF-8 3バイト → 計15バイト）</text>
+
+  <!-- STEP 1 -->
+  <rect x="280" y="196" width="240" height="38" rx="8" fill="#162040" stroke="#2a3f70" stroke-width="1"/>
+  <text x="292" y="210" font-size="9" fill="#7aaff0">STEP 1: 入力テキスト</text>
+  <text x="400" y="226" text-anchor="middle" font-size="18" font-weight="bold" fill="white">こんにちは</text>
+
+  <!-- 矢印 1→2 -->
+  <line x1="400" y1="234" x2="400" y2="247" stroke="#3a8fd0" stroke-width="2"/>
+  <polygon points="394,245 406,245 400,253" fill="#3a8fd0"/>
+
+  <!-- STEP 2 -->
+  <rect x="60" y="253" width="680" height="38" rx="8" fill="#162040" stroke="#2a3f70" stroke-width="1"/>
+  <text x="72" y="267" font-size="9" fill="#7aaff0">STEP 2: UTF-8 バイト列（各文字3バイト × 5文字 = 15バイト）</text>
+  <text x="400" y="283" text-anchor="middle" font-size="11.5" fill="#e0e8ff">E3 81 93  |  E3 82 93  |  E3 81 AB  |  E3 81 A1  |  E3 81 AF</text>
+
+  <!-- 矢印 2→3 -->
+  <line x1="400" y1="291" x2="400" y2="304" stroke="#3a8fd0" stroke-width="2"/>
+  <polygon points="394,302 406,302 400,310" fill="#3a8fd0"/>
+
+  <!-- STEP 3 -->
+  <rect x="60" y="310" width="680" height="48" rx="8" fill="#162040" stroke="#2a3f70" stroke-width="1"/>
+  <text x="72" y="324" font-size="9" fill="#7aaff0">STEP 3: 各バイトを5進数4桁（リトルエンディアン）に変換  ※ 例: 0xE3=227 → 227÷5=45余2, 45÷5=9余0, 9÷5=1余4, 1÷5=0余1</text>
+  <text x="400" y="347" text-anchor="middle" font-size="12" fill="#e0e8ff">E3(227)→[2,0,4,1]  |  81(129)→[4,0,0,1]  |  93(147)→[2,4,0,1]  ← 「こ」の3バイトの例</text>
+
+  <!-- 矢印 3→4 -->
+  <line x1="400" y1="358" x2="400" y2="371" stroke="#3a8fd0" stroke-width="2"/>
+  <polygon points="394,369 406,369 400,377" fill="#3a8fd0"/>
+
+  <!-- STEP 4 -->
+  <rect x="60" y="377" width="680" height="40" rx="8" fill="#162040" stroke="#2a3f70" stroke-width="1"/>
+  <text x="72" y="391" font-size="9" fill="#7aaff0">STEP 4: 5進数の桁を文字にマッピング（0→ウ, 1→ホ, 2→ッ, 3→！, 4→？）</text>
+  <text x="400" y="409" text-anchor="middle" font-size="12.5" fill="#e0e8ff">[2,0,4,1]→ッウ？ホ  |  [4,0,0,1]→？ウウホ  |  [2,4,0,1]→ッ？ウホ  ← 「こ」の例</text>
+
+  <!-- 矢印 4→結果 (緑) -->
+  <line x1="400" y1="417" x2="400" y2="430" stroke="#43a047" stroke-width="2"/>
+  <polygon points="394,428 406,428 400,436" fill="#43a047"/>
+
+  <!-- 結果ボックス -->
+  <rect x="60" y="436" width="680" height="42" rx="8" fill="#0d2a10" stroke="#43a047" stroke-width="1.5"/>
+  <text x="400" y="452" text-anchor="middle" font-size="10" fill="#7ef07e">結果：全バイトを連結（15バイト × 4文字 = 60ウホ文字）</text>
+  <text x="400" y="469" text-anchor="middle" font-size="13" font-weight="bold" fill="#7ef07e">ッウ？ホ？ウウホッ？ウホッウ？ホウホウホッ？ウホッウ？ホ？ウウホホ？ホホ…</text>
+
+  <!-- デコードノート -->
+  <text x="400" y="494" text-anchor="middle" font-size="11" fill="#a0b4d6">▲ デコード：逆の手順で元のテキストを復元</text>
+
+</svg>
