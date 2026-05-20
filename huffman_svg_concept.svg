@@ -1,0 +1,75 @@
+<svg width="760" height="380" xmlns="http://www.w3.org/2000/svg">
+  <rect width="760" height="380" fill="#fafbfc" rx="12" stroke="#dee2e6" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="380" y="30" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="17" font-weight="bold" fill="#333" text-anchor="middle">ハフマン符号の基本原理：頻度 → コード長</text>
+  <text x="380" y="50" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#888" text-anchor="middle">頻繁に出るバイト = 短いコード ／ めったに出ないバイト = 長いコード</text>
+
+  <!-- Column headers -->
+  <text x="75"  y="75" font-family="monospace" font-size="11" fill="#999" text-anchor="middle">バイト値</text>
+  <text x="280" y="75" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#999" text-anchor="middle">出現頻度（日本語テキスト）</text>
+  <text x="600" y="75" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#999" text-anchor="middle">割り当てられたコード</text>
+  <line x1="10" y1="80" x2="750" y2="80" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- === Row 1: 0xE3 === -->
+  <text x="42"  y="104" font-family="monospace" font-size="13" fill="#333">0xE3</text>
+  <text x="42"  y="118" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="9" fill="#999">ひらがな先頭</text>
+  <rect x="130" y="93" width="330" height="22" rx="4" fill="#4a90d9"/>
+  <text x="464" y="108" font-family="sans-serif" font-size="11" fill="#555">≈25%</text>
+  <!-- Code box -->
+  <rect x="550" y="90" width="36" height="28" rx="6" fill="#27ae60" stroke="white" stroke-width="1.5"/>
+  <text x="568" y="109" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="17" fill="white" text-anchor="middle" dominant-baseline="middle">！</text>
+  <text x="594" y="109" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#27ae60" dominant-baseline="middle">1文字</text>
+
+  <!-- === Row 2: 0x81 === -->
+  <rect x="10" y="130" width="740" height="34" rx="0" fill="#f3f9ff"/>
+  <text x="42"  y="150" font-family="monospace" font-size="13" fill="#333">0x81</text>
+  <text x="42"  y="162" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="9" fill="#999">継続バイト①</text>
+  <rect x="130" y="135" width="224" height="22" rx="4" fill="#4a90d9"/>
+  <text x="358" y="150" font-family="sans-serif" font-size="11" fill="#555">≈17%</text>
+  <rect x="550" y="132" width="36" height="28" rx="6" fill="#27ae60" stroke="white" stroke-width="1.5"/>
+  <text x="568" y="151" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="17" fill="white" text-anchor="middle" dominant-baseline="middle">ホ</text>
+  <text x="594" y="151" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#27ae60" dominant-baseline="middle">1文字</text>
+
+  <!-- === Row 3: 0x82 === -->
+  <text x="42"  y="196" font-family="monospace" font-size="13" fill="#333">0x82</text>
+  <text x="42"  y="208" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="9" fill="#999">継続バイト②</text>
+  <rect x="130" y="181" width="158" height="22" rx="4" fill="#5a9ae0"/>
+  <text x="292" y="196" font-family="sans-serif" font-size="11" fill="#555">≈12%</text>
+  <text x="568" y="196" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="15" fill="#e67e22" font-weight="bold" text-anchor="middle">？ウ</text>
+  <text x="594" y="196" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#e67e22" dominant-baseline="middle">2文字</text>
+
+  <!-- === Row 4: 0x80 === -->
+  <rect x="10" y="215" width="740" height="34" rx="0" fill="#f3f9ff"/>
+  <text x="42"  y="235" font-family="monospace" font-size="13" fill="#333">0x80</text>
+  <text x="42"  y="247" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="9" fill="#999">継続バイト③</text>
+  <rect x="130" y="220" width="53"  height="22" rx="4" fill="#7ab8ee"/>
+  <text x="187" y="235" font-family="sans-serif" font-size="11" fill="#555">≈4%</text>
+  <text x="568" y="235" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="15" fill="#e67e22" font-weight="bold" text-anchor="middle">ウ！</text>
+  <text x="594" y="235" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#e67e22" dominant-baseline="middle">2文字</text>
+
+  <!-- === Row 5: 0xAB === -->
+  <text x="42"  y="278" font-family="monospace" font-size="13" fill="#333">0xAB</text>
+  <text x="42"  y="290" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="9" fill="#999">継続バイト</text>
+  <rect x="130" y="263" width="14"  height="22" rx="4" fill="#a0cce8"/>
+  <text x="148" y="278" font-family="sans-serif" font-size="11" fill="#555">≈1%</text>
+  <text x="568" y="278" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="14" fill="#c0392b" font-weight="bold" text-anchor="middle">ッホ？</text>
+  <text x="600" y="278" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#c0392b" dominant-baseline="middle">3文字</text>
+
+  <!-- === Row 6: 0x20 === -->
+  <rect x="10" y="300" width="740" height="34" rx="0" fill="#f3f9ff"/>
+  <text x="42"  y="320" font-family="monospace" font-size="13" fill="#333">0x20</text>
+  <text x="42"  y="332" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="9" fill="#999">スペース</text>
+  <rect x="130" y="305" width="4"   height="22" rx="2" fill="#c8dde8"/>
+  <text x="138" y="320" font-family="sans-serif" font-size="11" fill="#555">≈0.3%</text>
+  <text x="568" y="320" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="13" fill="#c0392b" font-weight="bold" text-anchor="middle">？？ウホッ</text>
+  <text x="618" y="320" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#c0392b" dominant-baseline="middle">5文字</text>
+
+  <!-- Divider lines -->
+  <line x1="120" y1="80"  x2="120" y2="348" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="536" y1="80"  x2="536" y2="348" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="10"  y1="348" x2="750" y2="348" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- Footer note -->
+  <text x="380" y="365" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="10" fill="#aaa" text-anchor="middle">※ 頻度はサンプル20文から算出。標準エンコードでは全バイト均一4文字 → ハフマンで高頻度バイトを1〜2文字に圧縮</text>
+</svg>

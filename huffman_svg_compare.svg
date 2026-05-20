@@ -1,0 +1,63 @@
+<svg width="680" height="320" xmlns="http://www.w3.org/2000/svg">
+  <rect width="680" height="320" fill="#fafbfc" rx="12" stroke="#dee2e6" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="340" y="28" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="17" font-weight="bold" fill="#333" text-anchor="middle">圧縮率の比較</text>
+  <text x="340" y="46" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#888" text-anchor="middle">日本語20文のサンプルテキストで測定</text>
+
+  <!-- Y-axis labels -->
+  <text x="96"  y="96"  font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="13" fill="#555" text-anchor="end">標準</text>
+  <text x="96"  y="110" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="10" fill="#aaa" text-anchor="end">1バイト=4文字</text>
+  <text x="96"  y="172" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="13" fill="#555" text-anchor="end">5進HF</text>
+  <text x="96"  y="186" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="10" fill="#aaa" text-anchor="end">ハフマン圧縮</text>
+
+  <!-- Standard bar: 100% = 540px wide -->
+  <rect x="106" y="76"  width="540" height="36" rx="5" fill="#e74c3c"/>
+  <text x="376" y="99"  font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="14" fill="white" text-anchor="middle">1バイト → 固定4文字（12文字/漢字）</text>
+  <text x="654" y="99"  font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="14" fill="#e74c3c" font-weight="bold">100%</text>
+
+  <!-- HF bar: 52.5% = 283px wide -->
+  <rect x="106" y="152" width="284" height="36" rx="5" fill="#27ae60"/>
+  <text x="248" y="175" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="14" fill="white" text-anchor="middle">平均 ≈6.3文字/漢字</text>
+  <text x="398" y="175" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="14" fill="#27ae60" font-weight="bold">52.5%</text>
+
+  <!-- Reduction brace / annotation -->
+  <line x1="646" y1="112" x2="646" y2="152" stroke="#555" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="640" y1="112" x2="646" y2="112" stroke="#555" stroke-width="1.5"/>
+  <line x1="640" y1="152" x2="646" y2="152" stroke="#555" stroke-width="1.5"/>
+  <rect x="596" y="116" width="66" height="28" rx="6" fill="#2ecc71"/>
+  <text x="629" y="135" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="bold">▼47.5%</text>
+
+  <!-- Scale axis -->
+  <line x1="106" y1="208" x2="646" y2="208" stroke="#ccc" stroke-width="1"/>
+  <text x="106" y="220" font-family="sans-serif" font-size="10" fill="#aaa" text-anchor="middle">0%</text>
+  <text x="241" y="220" font-family="sans-serif" font-size="10" fill="#aaa" text-anchor="middle">25%</text>
+  <text x="376" y="220" font-family="sans-serif" font-size="10" fill="#aaa" text-anchor="middle">50%</text>
+  <text x="511" y="220" font-family="sans-serif" font-size="10" fill="#aaa" text-anchor="middle">75%</text>
+  <text x="646" y="220" font-family="sans-serif" font-size="10" fill="#aaa" text-anchor="middle">100%</text>
+  <line x1="241" y1="206" x2="241" y2="210" stroke="#ccc" stroke-width="1"/>
+  <line x1="376" y1="206" x2="376" y2="210" stroke="#ccc" stroke-width="1"/>
+  <line x1="511" y1="206" x2="511" y2="210" stroke="#ccc" stroke-width="1"/>
+
+  <!-- Detail table -->
+  <rect x="20" y="236" width="640" height="70" rx="8" fill="#f0f8f0" stroke="#c8e6c9" stroke-width="1"/>
+  <text x="340" y="254" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#2e7d32" text-anchor="middle" font-weight="bold">詳細（平均値）</text>
+
+  <!-- Row -->
+  <text x="40"  y="272" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#555">方式</text>
+  <text x="180" y="272" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#555">1バイトあたり</text>
+  <text x="320" y="272" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#555">漢字1文字あたり</text>
+  <text x="480" y="272" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#555">vs 標準</text>
+  <line x1="30" y1="275" x2="650" y2="275" stroke="#c8e6c9" stroke-width="1"/>
+
+  <text x="40"  y="293" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#e74c3c">標準</text>
+  <text x="180" y="293" font-family="monospace" font-size="12" fill="#555">4.0文字</text>
+  <text x="320" y="293" font-family="monospace" font-size="12" fill="#555">12.0文字</text>
+  <text x="480" y="293" font-family="monospace" font-size="12" fill="#e74c3c">—</text>
+
+  <text x="40"  y="297" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#27ae60"/>
+  <text x="40"  y="300" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#27ae60">5進HF</text>
+  <text x="180" y="300" font-family="monospace" font-size="12" fill="#555">≈2.1文字</text>
+  <text x="320" y="300" font-family="monospace" font-size="12" fill="#555">≈6.3文字</text>
+  <text x="480" y="300" font-family="monospace" font-size="12" fill="#27ae60" font-weight="bold">−47.5%</text>
+</svg>

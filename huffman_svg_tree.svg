@@ -1,0 +1,120 @@
+<svg width="880" height="500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="880" height="500" fill="#fafbfc" rx="12" stroke="#dee2e6" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="440" y="28" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="17" font-weight="bold" fill="#333" text-anchor="middle">5進ハフマン木の構造</text>
+  <text x="440" y="46" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="12" fill="#888" text-anchor="middle">枝のラベル = ゴリリンガルの5文字（ウ／ホ／ッ／！／？）</text>
+
+  <!-- ===== Root ===== -->
+  <circle cx="440" cy="82" r="26" fill="#e67e22" stroke="white" stroke-width="2.5"/>
+  <text x="440" y="87" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="13" fill="white" text-anchor="middle">根</text>
+
+  <!-- ===== Edges root → Level 1 ===== -->
+  <!-- → ウ(95, 220) -->
+  <line x1="420" y1="106" x2="105" y2="202" stroke="#bbb" stroke-width="2"/>
+  <text x="242" y="161" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="18" font-weight="bold" fill="#4a90d9" text-anchor="middle">ウ</text>
+
+  <!-- → ホ(268, 220) -->
+  <line x1="430" y1="107" x2="280" y2="202" stroke="#bbb" stroke-width="2"/>
+  <text x="346" y="168" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="18" font-weight="bold" fill="#4a90d9" text-anchor="middle">ホ</text>
+
+  <!-- → ッ(440, 220) -->
+  <line x1="440" y1="108" x2="440" y2="200" stroke="#bbb" stroke-width="2"/>
+  <text x="447" y="164" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="18" font-weight="bold" fill="#4a90d9">ッ</text>
+
+  <!-- → ！(612, 220) -->
+  <line x1="450" y1="107" x2="600" y2="202" stroke="#bbb" stroke-width="2"/>
+  <text x="534" y="168" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="18" font-weight="bold" fill="#4a90d9" text-anchor="middle">！</text>
+
+  <!-- → ？(785, 220) -->
+  <line x1="460" y1="106" x2="773" y2="202" stroke="#bbb" stroke-width="2"/>
+  <text x="638" y="161" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="18" font-weight="bold" fill="#4a90d9" text-anchor="middle">？</text>
+
+  <!-- ===== Level 1 Nodes ===== -->
+
+  <!-- ウ: internal -->
+  <circle cx="95"  cy="222" r="24" fill="#4a90d9" stroke="white" stroke-width="2"/>
+  <text x="95"  y="227" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="white" text-anchor="middle">内部</text>
+
+  <!-- ホ: LEAF 0x81 (最頻出2位) -->
+  <rect x="233" y="198" width="70" height="46" rx="8" fill="#27ae60" stroke="#1a8a4a" stroke-width="1.5"/>
+  <text x="268" y="216" font-family="monospace" font-size="13" fill="white" text-anchor="middle">0x81</text>
+  <text x="268" y="233" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#d4ffec" text-anchor="middle">コード:「ホ」</text>
+
+  <!-- ッ: internal (略) -->
+  <circle cx="440" cy="222" r="24" fill="#4a90d9" stroke="white" stroke-width="2"/>
+  <text x="440" y="227" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="white" text-anchor="middle">内部</text>
+  <text x="440" y="260" font-family="sans-serif" font-size="20" fill="#bbb" text-anchor="middle">⋮</text>
+
+  <!-- ！: LEAF 0xE3 (最頻出1位) -->
+  <rect x="577" y="198" width="70" height="46" rx="8" fill="#27ae60" stroke="#1a8a4a" stroke-width="1.5"/>
+  <text x="612" y="216" font-family="monospace" font-size="13" fill="white" text-anchor="middle">0xE3</text>
+  <text x="612" y="233" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#d4ffec" text-anchor="middle">コード:「！」</text>
+
+  <!-- ？: internal -->
+  <circle cx="785" cy="222" r="24" fill="#4a90d9" stroke="white" stroke-width="2"/>
+  <text x="785" y="227" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="white" text-anchor="middle">内部</text>
+
+  <!-- ===== Edges Level1 → Level2 ===== -->
+  <!-- ウ(95) → 0x80 leaf(36, 375) label ！ -->
+  <line x1="76"  y1="243" x2="45"  y2="358" stroke="#bbb" stroke-width="1.5"/>
+  <text x="52"  y="308" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="15" font-weight="bold" fill="#4a90d9">！</text>
+
+  <!-- ウ(95) → 0x83 leaf(130, 375) label ？ -->
+  <line x1="109" y1="244" x2="133" y2="358" stroke="#bbb" stroke-width="1.5"/>
+  <text x="120" y="308" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="15" font-weight="bold" fill="#4a90d9">？</text>
+
+  <!-- ウ → ellipsis (205, 375) -->
+  <line x1="115" y1="242" x2="205" y2="358" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- ？(785) → 0x82 leaf(730, 375) label ウ -->
+  <line x1="769" y1="242" x2="740" y2="358" stroke="#bbb" stroke-width="1.5"/>
+  <text x="742" y="308" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="15" font-weight="bold" fill="#4a90d9">ウ</text>
+
+  <!-- ？ → ellipsis (830, 375) -->
+  <line x1="797" y1="244" x2="832" y2="358" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- ===== Level 2 Nodes ===== -->
+  <!-- 0x80 "ウ！" -->
+  <rect x="10"  y="360" width="68" height="46" rx="7" fill="#5ab88a" stroke="white" stroke-width="1.5"/>
+  <text x="44"  y="378" font-family="monospace" font-size="12" fill="white" text-anchor="middle">0x80</text>
+  <text x="44"  y="395" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="10" fill="#d4ffec" text-anchor="middle">「ウ！」</text>
+
+  <!-- 0x83 "ウ？" -->
+  <rect x="98"  y="360" width="68" height="46" rx="7" fill="#5ab88a" stroke="white" stroke-width="1.5"/>
+  <text x="132" y="378" font-family="monospace" font-size="12" fill="white" text-anchor="middle">0x83</text>
+  <text x="132" y="395" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="10" fill="#d4ffec" text-anchor="middle">「ウ？」</text>
+
+  <!-- ウ-branch ellipsis -->
+  <text x="210" y="388" font-family="sans-serif" font-size="20" fill="#ccc" text-anchor="middle">…</text>
+
+  <!-- 0x82 "？ウ" -->
+  <rect x="706" y="360" width="68" height="46" rx="7" fill="#5ab88a" stroke="white" stroke-width="1.5"/>
+  <text x="740" y="378" font-family="monospace" font-size="12" fill="white" text-anchor="middle">0x82</text>
+  <text x="740" y="395" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="10" fill="#d4ffec" text-anchor="middle">「？ウ」</text>
+
+  <!-- ？-branch ellipsis -->
+  <text x="838" y="388" font-family="sans-serif" font-size="20" fill="#ccc" text-anchor="middle">…</text>
+
+  <!-- ===== Annotation: 1-char code explanation ===== -->
+  <rect x="510" y="278" width="210" height="50" rx="6" fill="#fffde7" stroke="#f9c822" stroke-width="1.5"/>
+  <text x="615" y="296" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#7a5c00" text-anchor="middle" font-weight="bold">⭐ 深さ1の葉 = 1文字コード</text>
+  <text x="615" y="312" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#7a5c00" text-anchor="middle">最頻出バイト → 最短コード</text>
+  <line x1="577" y1="278" x2="577" y2="244" stroke="#f9c822" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- ===== Legend ===== -->
+  <rect x="250" y="455" width="18" height="15" rx="3" fill="#27ae60"/>
+  <text x="272" y="467" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#555">葉ノード（バイト値 / 符号）</text>
+  <circle cx="400" cy="462" r="9" fill="#4a90d9"/>
+  <text x="413" y="467" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#555">内部ノード</text>
+  <circle cx="510" cy="462" r="9" fill="#e67e22"/>
+  <text x="523" y="467" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#555">根ノード（ツリーの頂点）</text>
+
+  <!-- Depth labels -->
+  <text x="864" y="92"  font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#aaa" text-anchor="end">深さ 0</text>
+  <text x="864" y="228" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#aaa" text-anchor="end">深さ 1</text>
+  <text x="864" y="388" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-size="11" fill="#aaa" text-anchor="end">深さ 2</text>
+  <line x1="862" y1="82"  x2="862" y2="100" stroke="#ddd" stroke-width="1"/>
+  <line x1="862" y1="218" x2="862" y2="236" stroke="#ddd" stroke-width="1"/>
+  <line x1="862" y1="378" x2="862" y2="396" stroke="#ddd" stroke-width="1"/>
+</svg>

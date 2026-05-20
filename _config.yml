@@ -1,0 +1,25 @@
+title: ゴリリンガル
+description: 日本語テキストをウホッ！？に変換するツール
+url: "https://yossato.github.io"
+baseurl: "/gorilingual"
+
+# プラグインなし・カスタムレイアウトのみ使用
+theme: null
+plugins: []
+
+# markdownのデフォルトレイアウト
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+
+# ビルド対象外ファイル
+exclude:
+  - .venv/
+  - huffman_analysis.py
+  - ogp_source.html
+  - "*.py"
+  - Gemfile
+  - Gemfile.lock
