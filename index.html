@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🦍 ゴリリンガル</title>
+  <!-- OGP / SNS Preview -->
+  <meta property="og:title" content="🦍 ゴリリンガル">
+  <meta property="og:description" content="日本語をウホッ！？の5文字だけで伝達する変換ツール。5進ハフマン符号化で最大47%圧縮。">
+  <meta property="og:image" content="https://yossato.github.io/gorilingual/ogp.png">
+  <meta property="og:url" content="https://yossato.github.io/gorilingual/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="🦍 ゴリリンガル">
+  <meta name="twitter:description" content="日本語をウホッ！？の5文字だけで伝達する変換ツール。5進ハフマン符号化で最大47%圧縮。">
+  <meta name="twitter:image" content="https://yossato.github.io/gorilingual/ogp.png">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -181,6 +191,17 @@
 
     .toast.show { transform: translateX(-50%) translateY(0); }
 
+    .mode-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .mode-label { font-size: 0.85rem; color: #a0b4d6; }
+    .btn-mode {
+      background: #2a3f70; color: #aab;
+      border: 1px solid #3a5a90; border-radius: 6px;
+      padding: 5px 14px; font-size: 0.85rem; font-weight: normal; cursor: pointer;
+    }
+    .btn-mode.active { background: #1a6fbf; color: #fff; border-color: #3a8fd0; font-weight: bold; }
+    .stats-bar { font-size: 0.8rem; color: #a0b4d6; margin-top: 8px; min-height: 18px; }
+    .decode-mode-label { font-size: 0.78rem; color: #7aaff0; margin-top: 6px; }
+
     @media (max-width: 500px) {
       h1 { font-size: 1.5rem; }
       .char-badge { min-width: 55px; font-size: 1.4rem; padding: 6px 14px; }
@@ -208,12 +229,18 @@
 <div class="panel">
   <div class="panel-header">📝 エンコード：日本語 → ウホッ！？</div>
   <div class="panel-body">
+    <div class="mode-row">
+      <span class="mode-label">モード：</span>
+      <button class="btn-mode active" id="mode-std"    onclick="setMode('std')">標準</button>
+      <button class="btn-mode"        id="mode-static" onclick="setMode('static')">圧縮</button>
+    </div>
     <textarea id="encode-input" placeholder="ここに日本語テキストを入力…" rows="3"></textarea>
     <div class="btn-row">
       <button class="btn-encode" onclick="doEncode()">エンコード</button>
       <button class="btn-copy"  onclick="copyResult('encode-output')">コピー</button>
       <button class="btn-clear" onclick="clearEncode()">クリア</button>
     </div>
+    <div id="encode-stats" class="stats-bar"></div>
     <div id="encode-output" class="output-box empty"></div>
   </div>
 </div>
@@ -229,6 +256,7 @@
       <button class="btn-clear" onclick="clearDecode()">クリア</button>
     </div>
     <div id="decode-output" class="output-box decode-out empty"></div>
+    <div id="decode-mode-label" class="decode-mode-label"></div>
   </div>
 </div>
 
@@ -272,21 +300,37 @@
   function decode(gorilingual) {
     // ウホッ！？ 以外の文字はスキップ
     const filtered = [...gorilingual].filter(c => c in CHAR_MAP);
+    // マジックバイト判定（先頭8文字 = 標準base-5で2バイト分）
+    if (filtered.length >= 8) {
+      const b0 = fiveBaseToBytes(filtered.slice(0, 4).map(c => CHAR_MAP[c]));
+      const b1 = fiveBaseToBytes(filtered.slice(4, 8).map(c => CHAR_MAP[c]));
+      if (b0 === 0xFF && b1 === 0xFD) return staticQHuffDecode(filtered.slice(8));
+    }
+    // 標準デコード（4の倍数チェック）
     if (filtered.length % 4 !== 0) {
       return { error: `文字数が4の倍数ではありません（${filtered.length}文字）。エンコードされたテキストを確認してください。` };
     }
+    // 標準デコード
     const bytes = [];
     for (let i = 0; i < filtered.length; i += 4) {
-      const group = filtered.slice(i, i + 4);
-      const digits = group.map(c => CHAR_MAP[c]);
-      bytes.push(fiveBaseToBytes(digits));
+      bytes.push(fiveBaseToBytes(filtered.slice(i, i + 4).map(c => CHAR_MAP[c])));
     }
     try {
       const text = new TextDecoder('utf-8', { fatal: true }).decode(new Uint8Array(bytes));
-      return { text };
+      return { text, mode: '標準' };
     } catch (e) {
       return { error: 'UTF-8デコードに失敗しました。入力を確認してください。' };
     }
+  }
+
+  let encodeMode = 'std';
+
+  function setMode(mode) {
+    encodeMode = mode;
+    document.getElementById('mode-std').classList.toggle('active',    mode === 'std');
+    document.getElementById('mode-static').classList.toggle('active', mode === 'static');
+    const input = document.getElementById('encode-input').value;
+    if (input.trim()) doEncode();
   }
 
   function doEncode() {
@@ -294,7 +338,21 @@
     if (!input.trim()) return;
 
     const utf8 = new TextEncoder().encode(input);
-    const encoded = [...utf8].map(b => byteTo5Base(b).map(d => CHARS[d]).join('')).join('');
+    const stdEncoded = [...utf8].map(b => byteTo5Base(b).map(d => CHARS[d]).join('')).join('');
+    const statsEl = document.getElementById('encode-stats');
+    let encoded;
+
+    if (encodeMode === 'static') {
+      encoded = staticQHuffEncode(input);
+      const diff = encoded.length - stdEncoded.length;
+      const pct  = Math.abs((diff / stdEncoded.length) * 100).toFixed(1);
+      statsEl.textContent = diff < 0
+        ? `標準: ${stdEncoded.length}文字 → 圧縮: ${encoded.length}文字（${pct}% 削減 ✓）`
+        : `標準: ${stdEncoded.length}文字 → 圧縮: ${encoded.length}文字（${pct}% 増加）`;
+    } else {
+      encoded = stdEncoded;
+      statsEl.textContent = `${encoded.length}文字`;
+    }
 
     const outEl = document.getElementById('encode-output');
     outEl.textContent = encoded;
@@ -306,13 +364,16 @@
     if (!input.trim()) return;
 
     const result = decode(input);
-    const outEl = document.getElementById('decode-output');
+    const outEl   = document.getElementById('decode-output');
+    const modeEl  = document.getElementById('decode-mode-label');
     if (result.error) {
-      outEl.textContent = '⚠ ' + result.error;
-      outEl.style.color = '#f07e7e';
+      outEl.textContent  = '⚠ ' + result.error;
+      outEl.style.color  = '#f07e7e';
+      modeEl.textContent = '';
     } else {
-      outEl.textContent = result.text;
-      outEl.style.color = '';
+      outEl.textContent  = result.text;
+      outEl.style.color  = '';
+      modeEl.textContent = `（${result.mode || '標準'}モードで復元）`;
     }
     outEl.classList.remove('empty');
   }
@@ -320,16 +381,18 @@
   function clearEncode() {
     document.getElementById('encode-input').value = '';
     const out = document.getElementById('encode-output');
-    out.textContent = '（エンコード結果がここに表示されます）';
+    out.textContent = '';
     out.classList.add('empty');
+    document.getElementById('encode-stats').textContent = '';
   }
 
   function clearDecode() {
     document.getElementById('decode-input').value = '';
     const out = document.getElementById('decode-output');
-    out.textContent = '（デコード結果がここに表示されます）';
+    out.textContent = '';
     out.classList.add('empty');
     out.style.color = '';
+    document.getElementById('decode-mode-label').textContent = '';
   }
 
   function copyResult(id) {
@@ -351,6 +414,38 @@
   document.getElementById('decode-input').addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doDecode(); }
   });
+
+  // ── 静的5進ハフマン (サンプル20文から事前構築、全256バイト対応) ──
+  // 0xFF=ウホウッ, 0xFD=！ウウッ をマジックプレフィックスとして使用
+  const STATIC_ENC=["？？ウホッ","？！ッ！？","？？ウホホ","？？！ウッ","？！ッ！！","？？？ッ？","？？ウホウ","？！？ホ！","？？！ウホ","？？ッッ？","？！ッ！ッ","？？！？！","？！？？？","？？ウ！！","？ッウホ？","？？ッ？ッ","？！？ホッ","？！ホ！ウ","？？！ウウ","？！ッッッ","？？ッッ！","？？ホウ？","？！ッ！ホ","？！ホホ？","？？ホ？ホ","？！ホッ？","？！？？！","？！ホホッ","？？！ッ！","？？ウッ！","？ッウホ！","？？ホホ！","？？ホホウ","？！ホ？ホ","？！？ホホ","？！ホ！！","？？？ウ？","？？？ウウ","？？ッ？？","？！ッホ！","？！ッッホ","？？ッ！！","？？ッッッ","？？ッホ？","？？ッホホ","？？ッウッ","？！ッ！ウ","？？！！？","？！ッウ！","？？？？ッ","？？ホ？ウ","？！ホウ？","？？ホッ！","？？？！！","？！？？ッ","？？！ッ？","？！ホホホ","？？ウ？ッ","？？！ッッ","？？！ホ？","？？？ホウ","？？ウウ？","？ッウホッ","？？ウウウ","？？ホホ？","？？ホホホ","？！ホ？？","？！ホ？ッ","？！ホ？ウ","？！？ホ？","？！ホ？！","？？ッ！ホ","？！ホ！ッ","？！ホ！ホ","？？？ウ！","？？？ウホ","？？！ウ？","？？！ウ！","？！？ホウ","？？ッ？ホ","？？ッ？ウ","？！ッッ！","？！ッッウ","？？ッ！？","？？ッ！ッ","？？ッ！ウ","？？ッッホ","？？ッッウ","？？ッホ！","？？ッホッ","？？ッホウ","？？ッウ！","？？ッウホ","？？ッウウ","？？ッ？！","？！？ッホ","？！ッホホ","？？！！ホ","？！ッウッ","？？？？？","？？ホ？？","？？？？ウ","？？ホ！？","？？！？ホ","？？ホ！ホ","？！ホウホ","？？ホッッ","？！ホッウ","？？ホウッ","？？？！ホ","？！？？ホ","？？？ッホ","？！？ッ！","？？！！ッ","？！ホホウ","？！ホウッ","？！ホッッ","？？ウ？ウ","？？！ッホ","？？ウ！ホ","？？？ホ！","？？！ホウ","？？ウ？？","？？ウッホ","？？！ホッ","？？ウウホ","？ッウホホ","？？ウホ！","ウ！","ホ","？ウ","ウ？","？ホ？","？？ホホッ","ッ！ウ","ウウッ","ッウホ","ウウホ","ッホ！","？ホウ","ッ？ッ","ッウ？","？ッ！？","ウウウ","？！ホ！？","？ッ！！","ッ！！","？！ッ？","ウホウ","ッホッ","ウホ？","？ッ？","？ッウウ","？！ウ","？ッ！ッ","ッ？ホッ","？ッ！ホ","？ッ！ウ","ッ？ホ？","？ホ！","？ッウ？","？ッウ！","？！ッッ？","ウホホ","ッウッ","？ホホ","ッ？ウ","？ッホ","ッッウ","ッウ！","ッッ？","ッホ？","？！？！","ウウ！","ッッ！","ッ？？","ウホッ","ウホ！","ッ？ホホ","ッッッ","ッ？ホウ","？？ホッウ","？？ッウ？","ウウ？","ッホホ","ッウウ","ッッホ","？ッウッ","ッ！ッ","ッホウ","？ホッ","？！？ウ","？！ッホッ","？！？ッウ","？！ッホウ","？？！！！","？！ッウ？","？？！！ウ","？！ッウホ","？！ホホ！","？！ッウウ","？？？？！","？？ホ？！","？？？？ホ","？？ホ？ッ","？？！？？","？？ホ！！","？？！？ッ","？？ホ！ッ","？？！？ウ","？？ホ！ウ","？！ホウ！","？？ホッ？","？！ホウウ","？？ホッホ","？！ホッ！","？？ホウ！","？？？！？","？？ホウホ","？？？！ッ","？？ホウウ","？？？！ウ","？！？？ウ","？？？ッ！","？！？ッ？","？？？ッウ","？！？ッッ","！","ッ？！","ウッ","？！！","？ッッ","ッ！？","ッ！ホ","？！ホッホ","？？ウ？ホ","？？？ッッ","？？ウ！？","？？！ッウ","ッ？ホ！","？？？ホ？","？？ウ！ウ","？？？ホッ","？？！ホ！","？？？ホホ","？？ウッ？","？？ウ？！","？？ウッッ","？？ウ！ッ","？？ウッウ","？？！ホホ","？？ウウ！","？？ウウッ","？？ウホ？","？！ッホ？","？？？ウッ"];
+  const STATIC_DEC = Object.fromEntries(STATIC_ENC.map((code, b) => [code, b]));
+
+  // マジック2バイト (base-5) をプレフィックスとして付加
+  const STATIC_MAGIC = CHARS[0xFF % 5] + CHARS[Math.floor(0xFF/5) % 5] + CHARS[Math.floor(0xFF/25) % 5] + CHARS[Math.floor(0xFF/125) % 5]
+                     + CHARS[0xFD % 5] + CHARS[Math.floor(0xFD/5) % 5] + CHARS[Math.floor(0xFD/25) % 5] + CHARS[Math.floor(0xFD/125) % 5];
+
+  function staticQHuffEncode(text) {
+    const utf8 = new TextEncoder().encode(text);
+    return STATIC_MAGIC + [...utf8].map(b => STATIC_ENC[b]).join('');
+  }
+
+  function staticQHuffDecode(dataChars) {
+    const result = [];
+    let buf = '';
+    for (const c of dataChars) {
+      buf += c;
+      if (buf in STATIC_DEC) { result.push(STATIC_DEC[buf]); buf = ''; }
+      else if (buf.length > 5) return { error: 'デコードエラー：静的テーブルに一致するコードが見つかりません。' };
+    }
+    if (buf.length > 0) return { error: 'デコードエラー：末尾に未対応のコードがあります。' };
+    try {
+      return { text: new TextDecoder('utf-8', { fatal: true }).decode(new Uint8Array(result)), mode: '静的5進HF' };
+    } catch (e) {
+      return { error: 'UTF-8デコードに失敗しました。' };
+    }
+  }
+
+  function huffmanDecode(filtered) { return { error: 'バイナリハフマン形式はサポートされていません。' }; }
 </script>
 </body>
 </html>

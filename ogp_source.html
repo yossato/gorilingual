@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 1200px; height: 630px; overflow: hidden;
+  background: #0d1830;
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  color: white;
+  position: relative;
+}
+
+/* 左側ゴールドバー */
+.side-bar {
+  position: absolute; left: 0; top: 0;
+  width: 12px; height: 100%;
+  background: linear-gradient(180deg, #ffd240, #ffaa00);
+}
+
+/* メインコンテンツ */
+.content {
+  position: absolute;
+  left: 48px; top: 0; right: 0; bottom: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 40px 60px 40px 36px;
+}
+
+/* タイトル行 */
+.title-row {
+  display: flex; align-items: center; gap: 18px;
+  margin-bottom: 16px;
+}
+.emoji { font-size: 76px; line-height: 1; }
+.title { font-size: 80px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+
+/* タグライン */
+.tagline {
+  font-size: 32px; font-weight: 500;
+  color: #5a8fd0;
+  margin-bottom: 28px;
+  letter-spacing: 1px;
+}
+
+/* 区切り */
+.divider {
+  height: 3px;
+  background: linear-gradient(90deg, #5a8fd0, transparent);
+  margin-bottom: 28px;
+}
+
+/* 変換例 */
+.example-row {
+  display: flex; align-items: center; gap: 24px;
+  margin-bottom: 28px;
+}
+.ex-input  { font-size: 52px; font-weight: 700; color: #ffd240; }
+.ex-arrow  { font-size: 34px; color: #667799; }
+.ex-output { font-size: 42px; font-weight: 600; color: #dde8ff; letter-spacing: 2px; }
+
+/* 説明タグ */
+.tags {
+  display: flex; gap: 20px; flex-wrap: wrap;
+}
+.tag {
+  background: rgba(90,143,208,0.18);
+  border: 1.5px solid rgba(90,143,208,0.5);
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 24px;
+  color: #a8c4e8;
+}
+
+/* フッター */
+.footer {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: rgba(0,0,0,0.35);
+  display: flex; align-items: center;
+  padding: 0 52px 0 60px;
+}
+.url { font-size: 28px; color: #5a8fd0; }
+</style>
+</head>
+<body>
+  <div class="side-bar"></div>
+  <div class="content">
+    <div class="title-row">
+      <span class="emoji">🦍</span>
+      <span class="title">ゴリリンガル</span>
+    </div>
+    <div class="tagline">日本語を「ウホッ！？」の5文字だけで伝達する</div>
+    <div class="divider"></div>
+    <div class="example-row">
+      <span class="ex-input">こんにちは</span>
+      <span class="ex-arrow">→</span>
+      <span class="ex-output">ッウ？ウウホホウッウ？ウ…</span>
+    </div>
+    <div class="tags">
+      <span class="tag">🔤 標準: 1バイト → 4文字</span>
+      <span class="tag">⚡ 圧縮: 5進ハフマン符号化 最大47%削減</span>
+    </div>
+  </div>
+  <div class="footer">
+    <span class="url">https://yossato.github.io/gorilingual/</span>
+  </div>
+</body>
+</html>
